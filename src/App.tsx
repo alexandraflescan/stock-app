@@ -2,7 +2,6 @@ import React, { useState} from 'react';
 
 import Search from './Components/Search/Search'
 import Chart from './Components/Chart/Chart'
-//import DataTypes from './Components/DataTypes/DataTypes'
 import TimeRange from './Components/TimeRange/TimeRange'
 import Checkbox from './Components/Checkbox/Checkbox'
 import DayPicker, {DateUtils} from 'react-day-picker';
@@ -10,9 +9,10 @@ import 'react-day-picker/lib/style.css';
 import '../src/App.css'
 
 function App() {
-const [chart, setChart] = useState("");
+const [chart, setChart] = useState([] as any);
 const [period, setPeriod] = useState(getInitialState());
-const [dataType, setDataType] = useState([] as any)
+const [dataType, setDataType] = useState([] as any);
+const [secondComp, setSecondComp] = useState (false);
 const [checkboxes, setCheckboxes] = useState( new Map([ 
 ["low", false],
 ["high", false],
@@ -23,8 +23,12 @@ const [average, setAverage] = useState(false);
 
 
 
-  function searchSymbol(symbol: any){
-   setChart(symbol);
+  function searchSymbol(symbol: string){
+    setChart((prevState: any) => [
+      ...prevState,
+      symbol
+    ]);
+
   }
 
   function handleDayClick(day: any) {
@@ -33,9 +37,9 @@ const [average, setAverage] = useState(false);
 
   }
 
-  function handleResetClick() {
-    const initialState = getInitialState();
-    setPeriod(initialState);
+
+  function compareCompanyHandler () {
+    setSecondComp(true)
   }
 
   function selectPeriodHandler(e: any){
@@ -52,7 +56,7 @@ const [average, setAverage] = useState(false);
   
   const displayAverageHandler = () => setAverage(!average)
   
-  function onCheckboxChange(checkName: any){
+  function onCheckboxChange(checkName: string){
     setCheckboxes(checkboxes.set(checkName, !checkboxes.get(checkName)));
     const dataElements = mapDataTypes(checkboxes);
     setDataType(dataElements);
@@ -90,14 +94,16 @@ function mapDataTypes(map: any){
 
   function appInit() {
     
-    if (chart !== ""){
+    if (chart.length > 0){
       return( 
       <div>
-      <Chart symbol={chart} periodRange={period} dataType={dataType} average={average}/>
+      <Chart company={chart} periodRange={period}  dataType={dataType} average={average} />
       <Checkbox
       isSelected={average} 
       onCheckboxChange={displayAverageHandler}
       name={"Show Average"}></Checkbox>
+
+
       </div>)
     }
   }
@@ -117,7 +123,7 @@ function mapDataTypes(map: any){
   const modifiers = { start: from, end: to };
   
   return (
-    <div className="App ">
+    <div className="App">
       <nav className="navbar navbar-light bg-light">
       <a className="navbar-brand">Stock Price</a>
     </nav>
@@ -137,9 +143,14 @@ function mapDataTypes(map: any){
     <h2>Select chart data type</h2>
      <div className="buttons-container">{allCheckboxes}</div>
   
-       <Search searchSymbol={searchSymbol}/>
+       <Search searchSymbol={searchSymbol} secondCompany={false}/>
+       <Checkbox
+      isSelected={secondComp} 
+      onCheckboxChange={compareCompanyHandler}
+      name={"Compare with"}></Checkbox>
+      {secondComp && <Search searchSymbol={searchSymbol} secondCompany={true}/>}
        </div>
-     
+
     <div className="chart-container">{showChart}</div>
     </div>
     </div>

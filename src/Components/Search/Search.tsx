@@ -23,7 +23,9 @@ function Search(props: any) {
          type="search" placeholder="Search" aria-label="Search" 
          value={symbol}
        onChange={e => setSymbol(e.target.value)}
-       onKeyPress={(e) => (e.key === 'Enter' ? searchHandler(symbol) : null)}
+       onKeyPress={(e) => (e.key === 'Enter' ? searchHandler(symbol) : null)
+      }
+      data-type={props.secondCompany}
        />
         <button className = "btn btn-outline-success my-2 my-sm-0" 
         onClick={() => searchHandler(symbol)} type="submit"

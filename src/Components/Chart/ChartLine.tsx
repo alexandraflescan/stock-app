@@ -1,14 +1,15 @@
-import React, {useState} from 'react';
+import React from 'react';
 import { Line } from "react-chartjs-2";
 
 function ChartLine(props: any) {
-   // const [chartData, setChartData] = useState([] as any);
     function random_rgba() {
         var o = Math.round, r = Math.random, s = 255;
         return `${o(r()*s)},${o(r()*s)},${o(r()*s)}`;
     }
   
     let chartLinesList = [] as any;
+
+    
     props.chartLines.forEach((line: any) => {
         let lineColor = random_rgba();   
         const retrievedData = {
@@ -21,6 +22,8 @@ function ChartLine(props: any) {
           chartLinesList.push(retrievedData)
     }  
     );
+
+    //show average if one line
     if (props.average === true  && chartLinesList.length === 1){
         let avg  = 0;
             const list = chartLinesList[0].data;
@@ -44,7 +47,11 @@ function ChartLine(props: any) {
       };
       chartLinesList.push(valuesAverage)
 
+
     }
+
+
+
             //get chart line data
             const data = {
                 labels: props.labels,

@@ -29,7 +29,7 @@ function Autocomplete (props: any){
               setErr(err)
             }
         )
-          }, [props.symbol]);
+          }, [props.symbol, apiUrl]);
 
           
          
