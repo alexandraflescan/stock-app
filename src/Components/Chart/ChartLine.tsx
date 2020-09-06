@@ -8,8 +8,8 @@ function ChartLine(props: any) {
     }
   
     let chartLinesList = [] as any;
+   
 
-    
     props.chartLines.forEach((line: any) => {
         let lineColor = random_rgba();   
         const retrievedData = {
@@ -24,7 +24,7 @@ function ChartLine(props: any) {
     );
 
     //show average if one line
-    if (props.average === true  && chartLinesList.length === 1){
+    if (props.average === true){
         let avg  = 0;
             const list = chartLinesList[0].data;
             var total = 0;
@@ -55,6 +55,7 @@ function ChartLine(props: any) {
             //get chart line data
             const data = {
                 labels: props.labels,
+                //actual lines in chart
                 datasets: chartLinesList
             };
          

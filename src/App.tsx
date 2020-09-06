@@ -5,6 +5,7 @@ import Chart from './Components/Chart/Chart'
 import TimeRange from './Components/TimeRange/TimeRange'
 import Checkbox from './Components/Checkbox/Checkbox'
 import DayPicker, {DateUtils} from 'react-day-picker';
+import Dropdown from './Components/Dropdown/Dropdown'
 import 'react-day-picker/lib/style.css';
 import '../src/App.css'
 
@@ -13,14 +14,18 @@ const [chart, setChart] = useState([] as any);
 const [period, setPeriod] = useState(getInitialState());
 const [dataType, setDataType] = useState([] as any);
 const [secondComp, setSecondComp] = useState (false);
-const [checkboxes, setCheckboxes] = useState( new Map([ 
-["low", false],
-["high", false],
-["volume", false]])
-);
-
 const [average, setAverage] = useState(false);
-
+const [checkboxes, setCheckboxes] = useState( new Map([ 
+["open", false],
+["high", false],
+["low", false],
+["close", false],
+["adjusted close", false],
+["volume", false],
+["dividend amount", false],
+["split coefficient", false]
+])
+);
 
 
   function searchSymbol(symbol: string){
@@ -36,7 +41,6 @@ const [average, setAverage] = useState(false);
     setPeriod(range);
 
   }
-
 
   function compareCompanyHandler () {
     setSecondComp(true)
@@ -56,7 +60,7 @@ const [average, setAverage] = useState(false);
   
   const displayAverageHandler = () => setAverage(!average)
   
-  function onCheckboxChange(checkName: string){
+  function selectDataType(checkName: string){
     setCheckboxes(checkboxes.set(checkName, !checkboxes.get(checkName)));
     const dataElements = mapDataTypes(checkboxes);
     setDataType(dataElements);
@@ -69,6 +73,10 @@ function mapDataTypes(map: any){
     for (let [key, value] of map) {
       if(value === true){
         switch(key){
+          case("open"):
+          dataElem = "1. open" ;
+          break;
+
           case("high"):
           dataElem = "2. high" ;
           break;
@@ -76,12 +84,28 @@ function mapDataTypes(map: any){
           case("low"):
           dataElem =  "3. low";
           break;
+
+          case("close"):
+          dataElem =  "4. close";
+          break;
+
+          case("adjusted close"):
+          dataElem =  "5. adjusted close";
+          break;
           
           case("volume"):
           dataElem = "6. volume";
           break;
+
+          case("dividend amount"):
+          dataElem = "7. dividend amount";
+          break;
+          case("split coefficient"):
+          dataElem = "8. split coefficient";
+          break;
+
         }
-    
+
         newDataType.push(dataElem)
       }
 
@@ -89,8 +113,10 @@ function mapDataTypes(map: any){
   return newDataType;
 }
 
-
- 
+function resetHandler(){
+  console.log("btn clicked")
+  //to be done after bringing Redux
+}
 
   function appInit() {
     
@@ -104,7 +130,8 @@ function mapDataTypes(map: any){
       name={"Show Average"}></Checkbox>
 
 
-      </div>)
+      </div>
+      )
     }
   }
 
@@ -114,7 +141,7 @@ function mapDataTypes(map: any){
 
    return <Checkbox
   isSelected={isSelected} 
-   onCheckboxChange={onCheckboxChange}
+   onCheckboxChange={selectDataType}
    name={property[0]}/>
   } 
     )
@@ -141,7 +168,8 @@ function mapDataTypes(map: any){
     
     <TimeRange selectPeriodHandler={selectPeriodHandler} />
     <h2>Select chart data type</h2>
-     <div className="buttons-container">{allCheckboxes}</div>
+     {/* <div className="buttons-container">{allCheckboxes}</div> */}
+     <Dropdown dataTypes={checkboxes} onCheckboxChange={selectDataType} ></Dropdown>
   
        <Search searchSymbol={searchSymbol} secondCompany={false}/>
        <Checkbox
@@ -149,9 +177,12 @@ function mapDataTypes(map: any){
       onCheckboxChange={compareCompanyHandler}
       name={"Compare with"}></Checkbox>
       {secondComp && <Search searchSymbol={searchSymbol} secondCompany={true}/>}
+      <button className="btn btn-outline-danger btn-lg" onClick={resetHandler}>Reset</button>
+
        </div>
 
     <div className="chart-container">{showChart}</div>
+   
     </div>
     </div>
 

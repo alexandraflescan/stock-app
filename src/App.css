@@ -59,3 +59,7 @@ select:-webkit-autofill:focus {
 ul {
     list-style-type: none;
    }
+
+.white{
+    background-color: white;
+}
