@@ -1,8 +1,7 @@
 import  React, {  useState, useEffect } from 'react';
 import ChartLine from './ChartLine';
 import '../../App.css';
-import StockData from '../Classes/StockData'
-import fbData from '../../data_fb.json';
+import StockData from '../Classes/StockData';
 
 type ChartProps = {
   company: any,
@@ -101,7 +100,7 @@ export default function Chart ({company, periodRange, dataType, average}: ChartP
 
      
   
-  },  [fetchUrl])
+  },  [symbol])
 
   useEffect(() => {
     if (Object.keys(store).length === 0 && store.constructor === Object ) return;

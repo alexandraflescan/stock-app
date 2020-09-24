@@ -1,15 +1,19 @@
 import React, { useState} from 'react';
+import { useDispatch, useSelector } from "react-redux";
 
-import Search from './Components/Search/Search'
-import Chart from './Components/Chart/Chart'
-import TimeRange from './Components/TimeRange/TimeRange'
-import Checkbox from './Components/Checkbox/Checkbox'
+
+import Search from './Components/Search/Search';
+import Chart from './Components/Chart/Chart';
+import TimeRange from './Components/TimeRange/TimeRange';
+import Checkbox from './Components/Checkbox/Checkbox';
 import DayPicker, {DateUtils} from 'react-day-picker';
-import Dropdown from './Components/Dropdown/Dropdown'
+import Dropdown from './Components/Dropdown/Dropdown';
+import Counter from './Components/Counter/Counter'
 import 'react-day-picker/lib/style.css';
 import '../src/App.css'
 
 function App() {
+
 const [chart, setChart] = useState([] as any);
 const [period, setPeriod] = useState(getInitialState());
 const [dataType, setDataType] = useState([] as any);
@@ -113,6 +117,7 @@ function mapDataTypes(map: any){
   return newDataType;
 }
 
+
 function resetHandler(){
   console.log("btn clicked")
   //to be done after bringing Redux
@@ -156,7 +161,7 @@ function resetHandler(){
     </nav>
     <div className="page-wrapper">
      <div className="search-container">
-  
+    <Counter></Counter>
     <h2>Select custom or  default period</h2>
    <DayPicker 
    className="Selectable"
