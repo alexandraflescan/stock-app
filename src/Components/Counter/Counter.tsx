@@ -1,7 +1,7 @@
 import React from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import {addCount, removeCount} from "../../Store/actions"
-import {CountState} from "../../Store/reducer"
+import {addCount, removeCount} from "../../Store/Actions/actions"
+import {CountState} from "../../Store/Reducers/reducer"
 
 function Counter () {
     

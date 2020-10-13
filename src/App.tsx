@@ -11,12 +11,15 @@ import Dropdown from './Components/Dropdown/Dropdown';
 import Counter from './Components/Counter/Counter'
 import 'react-day-picker/lib/style.css';
 import '../src/App.css'
+import {IAppState} from "./Store/Reducers/reducer"
+import {addCompany, updatePeriod, addDataType} from ".//Store/Actions/actions"
 
 function App() {
+const lookupDetailsStore = useSelector<IAppState, IAppState["lookUpDetails"]>((state) => state.lookUpDetails);
 
-const [chart, setChart] = useState([] as any);
-const [period, setPeriod] = useState(getInitialState());
-const [dataType, setDataType] = useState([] as any);
+//const [chart, setChart] = useState([] as any);
+// const [period, setPeriod] = useState(getInitialState());
+//const [dataType, setDataType] = useState([] as any);
 const [secondComp, setSecondComp] = useState (false);
 const [average, setAverage] = useState(false);
 const [checkboxes, setCheckboxes] = useState( new Map([ 
@@ -31,18 +34,26 @@ const [checkboxes, setCheckboxes] = useState( new Map([
 ])
 );
 
-
+const dispatch = useDispatch();
+console.log("initial state:", lookupDetailsStore);
   function searchSymbol(symbol: string){
-    setChart((prevState: any) => [
-      ...prevState,
-      symbol
-    ]);
 
+    //ADD_COMPANY
+    
+    // setChart((prevState: any) => [
+    //   ...prevState,
+    //   symbol
+    // ]);
+    dispatch(addCompany(symbol))
+    console.log("add companies state", lookupDetailsStore)
   }
 
   function handleDayClick(day: any) {
-    const range = DateUtils.addDayToRange(day, period);
-    setPeriod(range);
+
+    const range = DateUtils.addDayToRange(day, lookupDetailsStore.timeRange);
+    //UPDATE_PERIOD
+  //  setPeriod(range);
+       dispatch(updatePeriod(range))
 
   }
 
@@ -55,22 +66,20 @@ const [checkboxes, setCheckboxes] = useState( new Map([
   return currentBtn;
 }
 
-  function getInitialState() {
-    return {
-      from: new Date(),
-      to: new Date()
-    };
-  }
+
   
   const displayAverageHandler = () => setAverage(!average)
   
   function selectDataType(checkName: string){
     setCheckboxes(checkboxes.set(checkName, !checkboxes.get(checkName)));
     const dataElements = mapDataTypes(checkboxes);
-    setDataType(dataElements);
+    //ADD_DATATYPE
+    //setDataType(dataElements);
+    dispatch(addDataType(dataElements))
 
   }
 
+//helpers
 function mapDataTypes(map: any){
   let newDataType = [] as any;
   let dataElem = "";
@@ -125,16 +134,16 @@ function resetHandler(){
 
   function appInit() {
     
-    if (chart.length > 0){
+    if (lookupDetailsStore.companyList.length > 0){
       return( 
       <div>
-      <Chart company={chart} periodRange={period}  dataType={dataType} average={average} />
+      <Chart company={lookupDetailsStore.companyList}
+      periodRange={lookupDetailsStore.timeRange}  
+      dataType={lookupDetailsStore.dataTypesList} average={average} />
       <Checkbox
       isSelected={average} 
       onCheckboxChange={displayAverageHandler}
       name={"Show Average"}></Checkbox>
-
-
       </div>
       )
     }
@@ -151,7 +160,7 @@ function resetHandler(){
   } 
     )
   const showChart = appInit();
-  const { from, to } = period;
+  const { from, to } = lookupDetailsStore.timeRange;
   const modifiers = { start: from, end: to };
   
   return (
@@ -187,7 +196,6 @@ function resetHandler(){
        </div>
 
     <div className="chart-container">{showChart}</div>
-   
     </div>
     </div>
 

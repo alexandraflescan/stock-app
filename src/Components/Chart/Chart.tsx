@@ -5,7 +5,7 @@ import StockData from '../Classes/StockData';
 
 type ChartProps = {
   company: any,
-  periodRange: {from: Date; to: Date},
+  periodRange: any,
   dataType: Array<string>,
   average: boolean
 }
